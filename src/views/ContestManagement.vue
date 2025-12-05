@@ -51,7 +51,7 @@
             </a-tag>
           </template>
           <template v-if="column.key === 'action'">
-            <a-space :wrap="false">
+            <div class="action-buttons">
               <a @click="handleAllSubmissions(record)">全部提交</a>
               <a-divider type="vertical" />
               <a @click="handleManageProblems(record)">管理题目</a>
@@ -65,7 +65,7 @@
               <a @click="handleEdit(record)">编辑</a>
               <a-divider type="vertical" />
               <a @click="handleDelete(record)" class="danger-link">删除</a>
-            </a-space>
+            </div>
           </template>
         </template>
       </a-table>
@@ -272,5 +272,12 @@ const handleDelete = (contest: Contest) => {
 
 .danger-link:hover {
   color: #ff7875;
+}
+
+.action-buttons {
+  display: flex;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  align-items: center;
 }
 </style>
