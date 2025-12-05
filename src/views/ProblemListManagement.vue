@@ -45,6 +45,9 @@
         :scroll="{ x: 1200 }"
       >
         <template #bodyCell="{ column, record }">
+          <template v-if="column.key === 'permission'">
+            <span>{{ record.permission === '公开' ? '公开' : '私密' }}</span>
+          </template>
           <template v-if="column.key === 'action'">
             <a-space :wrap="false">
               <a @click="handleManageProblems(record)">管理题目</a>
@@ -123,7 +126,6 @@ const columns = [
   },
   {
     title: '权限',
-    dataIndex: 'permission',
     key: 'permission',
     width: 80,
   },
