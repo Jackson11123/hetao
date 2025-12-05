@@ -13,7 +13,7 @@
         </a-form-item>
 
         <!-- 比赛描述 -->
-        <a-form-item label="比赛描述">
+        <a-form-item label="比赛描述" required>
           <div class="markdown-editor">
             <div class="editor-toolbar">
               <a-space>
@@ -93,20 +93,25 @@
             </a-form-item>
           </a-col>
           <a-col :span="8">
-            <a-form-item label="比赛时长">
+            <a-form-item label="比赛时长" required>
               <a-input v-model:value="formData.duration" disabled />
             </a-form-item>
           </a-col>
         </a-row>
 
-        <!-- 比赛赛制、语言列表 -->
+        <!-- 比赛赛事、语言列表 -->
         <a-row :gutter="24">
           <a-col :span="8">
-            <a-form-item label="比赛赛制">
-              <a-select v-model:value="formData.format" style="width: 100%">
-                <a-select-option value="acm">ACM赛制</a-select-option>
-                <a-select-option value="oi">OI赛制</a-select-option>
-                <a-select-option value="ioi">IOI赛制</a-select-option>
+            <a-form-item label="比赛赛事" required>
+              <a-select v-model:value="formData.contestEvent" placeholder="请选择比赛赛事" style="width: 100%">
+                <a-select-option value="核桃周赛">核桃周赛</a-select-option>
+                <a-select-option value="核桃月赛">核桃月赛</a-select-option>
+                <a-select-option value="CSP初赛">CSP初赛</a-select-option>
+                <a-select-option value="CSP-J">CSP-J</a-select-option>
+                <a-select-option value="CSP-S">CSP-S</a-select-option>
+                <a-select-option value="NOIP">NOIP</a-select-option>
+                <a-select-option value="C++培训">C++培训</a-select-option>
+                <a-select-option value="是">是</a-select-option>
               </a-select>
             </a-form-item>
           </a-col>
@@ -124,32 +129,45 @@
         <!-- 比赛赛制、IO模式、比赛权限 -->
         <a-row :gutter="24">
           <a-col :span="8">
-            <a-form-item label="比赛赛制">
-              <a-select v-model:value="formData.contestType" style="width: 100%">
-                <a-select-option value="normal">正式比赛</a-select-option>
-                <a-select-option value="practice">练习赛</a-select-option>
+            <a-form-item label="比赛赛制" required>
+              <a-select v-model:value="formData.format" placeholder="请选择比赛赛制" style="width: 100%">
+                <a-select-option value="OI">OI</a-select-option>
+                <a-select-option value="ACM">ACM</a-select-option>
+                <a-select-option value="乐多">乐多</a-select-option>
+                <a-select-option value="IOI">IOI</a-select-option>
+                <a-select-option value="IOI(OFS)">IOI(OFS)</a-select-option>
+                <a-select-option value="严格IOI">严格IOI</a-select-option>
               </a-select>
             </a-form-item>
           </a-col>
           <a-col :span="8">
             <a-form-item label="IO模式">
               <a-select v-model:value="formData.ioMode" style="width: 100%">
-                <a-select-option value="standard">标准IO</a-select-option>
-                <a-select-option value="file">文件IO</a-select-option>
+                <a-select-option value="标准IO">标准IO</a-select-option>
+                <a-select-option value="文件IO">文件IO</a-select-option>
               </a-select>
             </a-form-item>
           </a-col>
           <a-col :span="8">
             <a-form-item label="比赛权限">
               <a-select v-model:value="formData.permission" style="width: 100%">
-                <a-select-option value="private">私密比赛</a-select-option>
-                <a-select-option value="public">公开比赛</a-select-option>
+                <a-select-option value="私密比赛">私密比赛</a-select-option>
+                <a-select-option value="公开比赛">公开比赛</a-select-option>
               </a-select>
             </a-form-item>
           </a-col>
         </a-row>
 
-        <!-- 开关选项第一行 -->
+        <!-- ACM赛制特有：是否开启封榜 -->
+        <a-row v-if="formData.format === 'ACM'" :gutter="24">
+          <a-col :span="8">
+            <a-form-item label="是否开启封榜">
+              <a-switch v-model:checked="formData.enableFreeze" checked-children="是" un-checked-children="否" />
+            </a-form-item>
+          </a-col>
+        </a-row>
+
+        <!-- 通用开关：赛后是否允许提交、是否需要口令 -->
         <a-row :gutter="24">
           <a-col :span="8">
             <a-form-item label="赛后是否允许提交">
@@ -157,18 +175,32 @@
             </a-form-item>
           </a-col>
           <a-col :span="8">
-            <a-form-item label="是否限制已开">
-              <a-switch v-model:checked="formData.limitStarted" checked-children="是" un-checked-children="否" />
+            <a-form-item label="是否需要口令">
+              <a-switch v-model:checked="formData.needPassword" checked-children="是" un-checked-children="否" />
             </a-form-item>
           </a-col>
         </a-row>
 
-        <!-- 开关选项第二行 -->
-        <a-form-item label="请将老师是否允许作弊检测提醒">
-          <a-switch v-model:checked="formData.cheatingDetection" checked-children="是" un-checked-children="否" />
+        <!-- 课导老师是否允许查看成绩表 -->
+        <a-form-item label="课导老师是否允许查看成绩表">
+          <a-switch v-model:checked="formData.teacherViewScore" checked-children="是" un-checked-children="否" />
         </a-form-item>
 
-        <!-- 开关选项第三行 -->
+        <!-- OI/IOI/IOI(OFS)/严格IOI赛制特有选项 -->
+        <a-row v-if="isOIType" :gutter="24">
+          <a-col :span="8">
+            <a-form-item label="是否隐藏用户端提交结果">
+              <a-switch v-model:checked="formData.hideSubmitResult" checked-children="是" un-checked-children="否" />
+            </a-form-item>
+          </a-col>
+          <a-col :span="8" v-if="formData.format === 'OI'">
+            <a-form-item label="个人比赛时间结束是否可看成绩">
+              <a-switch v-model:checked="formData.viewScoreAfterEnd" checked-children="是" un-checked-children="否" />
+            </a-form-item>
+          </a-col>
+        </a-row>
+
+        <!-- 是否展示题目难度信息、是否展示题目标签 -->
         <a-row :gutter="24">
           <a-col :span="8">
             <a-form-item label="是否展示题目难度信息">
@@ -176,7 +208,7 @@
             </a-form-item>
           </a-col>
           <a-col :span="8">
-            <a-form-item label="是否输出题目标签">
+            <a-form-item label="是否展示题目标签">
               <a-switch v-model:checked="formData.showTags" checked-children="是" un-checked-children="否" />
             </a-form-item>
           </a-col>
@@ -195,7 +227,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { reactive, ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { message } from 'ant-design-vue'
 import type { Dayjs } from 'dayjs'
@@ -233,16 +265,28 @@ const formData = reactive({
   startTime: null as Dayjs | null,
   endTime: null as Dayjs | null,
   duration: '',
-  format: 'acm',
+  contestEvent: '',
+  format: '',
   languages: ['cpp14', 'cpp17', 'python3'],
-  contestType: 'normal',
-  ioMode: 'standard',
-  permission: 'private',
+  ioMode: '标准IO',
+  permission: '私密比赛',
+  // ACM特有
+  enableFreeze: false,
+  // 通用开关
   allowPostSubmit: false,
-  limitStarted: false,
-  cheatingDetection: true,
+  needPassword: false,
+  teacherViewScore: true,
+  // OI类型特有
+  hideSubmitResult: false,
+  viewScoreAfterEnd: false,
+  // 展示选项
   showDifficulty: false,
   showTags: false,
+})
+
+// 判断是否为OI类型赛制
+const isOIType = computed(() => {
+  return ['OI', 'IOI', 'IOI(OFS)', '严格IOI'].includes(formData.format)
 })
 
 const handleCopyFromOther = () => {
@@ -260,6 +304,14 @@ const handleSave = () => {
   }
   if (!formData.endTime) {
     message.error('请选择结束时间')
+    return
+  }
+  if (!formData.contestEvent) {
+    message.error('请选择比赛赛事')
+    return
+  }
+  if (!formData.format) {
+    message.error('请选择比赛赛制')
     return
   }
   message.success('比赛创建成功（原型展示）')
