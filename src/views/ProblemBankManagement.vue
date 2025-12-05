@@ -102,7 +102,7 @@ const columns = [
 
 // 创建题库
 const handleCreate = () => {
-  message.info('创建题库（原型展示）')
+  router.push({ name: 'CreateProblemBank' })
 }
 
 // 权限变更

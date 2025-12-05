@@ -30,6 +30,12 @@ const routes: RouteRecordRaw[] = [
         meta: { title: '小组管理' }
       },
       {
+        path: 'groups/create',
+        name: 'CreateGroup',
+        component: () => import('../views/CreateGroup.vue'),
+        meta: { title: '创建小组' }
+      },
+      {
         path: 'groups/:id',
         name: 'GroupDetail',
         component: () => import('../views/GroupDetail.vue'),
@@ -66,16 +72,34 @@ const routes: RouteRecordRaw[] = [
         meta: { title: '比赛管理' }
       },
       {
+        path: 'contests/create',
+        name: 'CreateContest',
+        component: () => import('../views/CreateContest.vue'),
+        meta: { title: '创建比赛' }
+      },
+      {
         path: 'problem-lists',
         name: 'ProblemListManagement',
         component: () => import('../views/ProblemListManagement.vue'),
         meta: { title: '题单管理' }
       },
       {
+        path: 'problem-lists/create',
+        name: 'CreateProblemList',
+        component: () => import('../views/CreateProblemList.vue'),
+        meta: { title: '创建题单' }
+      },
+      {
         path: 'problem-banks',
         name: 'ProblemBankManagement',
         component: () => import('../views/ProblemBankManagement.vue'),
         meta: { title: '题库管理' }
+      },
+      {
+        path: 'problem-banks/create',
+        name: 'CreateProblemBank',
+        component: () => import('../views/CreateProblemBank.vue'),
+        meta: { title: '创建题库' }
       },
       {
         path: 'problem-banks/:id',

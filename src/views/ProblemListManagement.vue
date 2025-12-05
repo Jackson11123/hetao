@@ -65,10 +65,13 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { SearchOutlined, PlusOutlined } from '@ant-design/icons-vue'
 import { message } from 'ant-design-vue'
 import type { ProblemList } from '../types'
 import { mockProblemLists } from '../mock/data'
+
+const router = useRouter()
 
 // 题单列表数据
 const problemLists = ref<ProblemList[]>([...mockProblemLists])
@@ -155,7 +158,7 @@ const handleReset = () => {
 
 // 创建题单
 const handleCreate = () => {
-  message.info('创建题单（原型展示）')
+  router.push({ name: 'CreateProblemList' })
 }
 
 // 管理题目

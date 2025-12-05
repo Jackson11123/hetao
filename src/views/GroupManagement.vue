@@ -238,7 +238,7 @@ const handleReset = () => {
 
 // 创建小组
 const handleCreate = () => {
-  message.info('创建小组（原型展示）')
+  router.push({ name: 'CreateGroup' })
 }
 
 // 权限变更

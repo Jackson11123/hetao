@@ -81,10 +81,13 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { SearchOutlined, PlusOutlined } from '@ant-design/icons-vue'
 import { message } from 'ant-design-vue'
 import type { Contest } from '../types'
 import { mockContests } from '../mock/data'
+
+const router = useRouter()
 
 // 比赛列表数据
 const contests = ref<Contest[]>([...mockContests])
@@ -203,7 +206,7 @@ const handleReset = () => {
 
 // 创建比赛
 const handleCreate = () => {
-  message.info('创建比赛（原型展示）')
+  router.push({ name: 'CreateContest' })
 }
 
 // 全部提交
