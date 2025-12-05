@@ -46,7 +46,7 @@
       >
         <template #bodyCell="{ column, record }">
           <template v-if="column.key === 'action'">
-            <a-space>
+            <a-space :wrap="false">
               <a @click="handleManageProblems(record)">管理题目</a>
               <a-divider type="vertical" />
               <a @click="handleCompletionStatus(record)">完成情况</a>
@@ -130,7 +130,7 @@ const columns = [
   {
     title: '操作',
     key: 'action',
-    width: 280,
+    width: 340,
     fixed: 'right' as const,
   },
 ]

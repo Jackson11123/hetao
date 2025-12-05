@@ -42,7 +42,7 @@
         </template>
         <template v-if="column.key === 'action'">
           <!-- 引用的比赛：只有完成情况和移除 -->
-          <a-space v-if="record.isRef">
+          <a-space v-if="record.isRef" :wrap="false">
             <a @click="handleAllSubmissions(record)">全部提交</a>
             <a-divider type="vertical" />
             <a @click="handleRanking(record)">成绩表</a>
@@ -50,7 +50,7 @@
             <a @click="handleRemove(record)" class="danger-link">移除</a>
           </a-space>
           <!-- 自己创建的比赛：完整操作 -->
-          <a-space v-else>
+          <a-space v-else :wrap="false">
             <a @click="handleAllSubmissions(record)">全部提交</a>
             <a-divider type="vertical" />
             <a @click="handleRanking(record)">成绩表</a>
@@ -183,7 +183,7 @@ const columns = [
   { title: '补题人数', dataIndex: 'reviewCount', key: 'reviewCount', width: 90 },
   { title: '最近修改人', dataIndex: 'lastModifiedBy', key: 'lastModifiedBy', width: 100 },
   { title: '权限', key: 'permission', width: 90 },
-  { title: '操作', key: 'action', width: 380, fixed: 'right' as const },
+  { title: '操作', key: 'action', width: 480, fixed: 'right' as const },
 ]
 
 const getStatusColor = (status: string) => {

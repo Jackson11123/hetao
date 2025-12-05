@@ -34,18 +34,15 @@
           </div>
         </template>
         <template v-if="column.key === 'permission'">
-          <a-select :value="record.permission" size="small" style="width: 100px">
-            <a-select-option value="公开题单">公开题单</a-select-option>
-            <a-select-option value="私密题单">私密题单</a-select-option>
-          </a-select>
+          <span>{{ record.permission === '公开题单' ? '公开' : '私密' }}</span>
         </template>
         <template v-if="column.key === 'action'">
-          <a-space v-if="record.isRef">
+          <a-space v-if="record.isRef" :wrap="false">
             <a @click="handleViewProgress(record)">完成情况</a>
             <a-divider type="vertical" />
             <a @click="handleRemove(record)" class="danger-link">移除</a>
           </a-space>
-          <a-space v-else>
+          <a-space v-else :wrap="false">
             <a @click="handleViewProgress(record)">完成情况</a>
             <a-divider type="vertical" />
             <a @click="handleManageProblems(record)">管理题目</a>
@@ -205,7 +202,7 @@ const columns = [
   { title: '创建时间', dataIndex: 'createdAt', key: 'createdAt', width: 180 },
   { title: '最近修改人', dataIndex: 'lastModifiedBy', key: 'lastModifiedBy', width: 100 },
   { title: '权限', key: 'permission', width: 120 },
-  { title: '操作', key: 'action', width: 280 },
+  { title: '操作', key: 'action', width: 340 },
 ]
 
 const handleSearch = () => {

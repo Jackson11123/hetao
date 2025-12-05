@@ -51,7 +51,7 @@
             </a-tag>
           </template>
           <template v-if="column.key === 'action'">
-            <a-space>
+            <a-space :wrap="false">
               <a @click="handleAllSubmissions(record)">全部提交</a>
               <a-divider type="vertical" />
               <a @click="handleManageProblems(record)">管理题目</a>
@@ -156,7 +156,7 @@ const columns = [
   {
     title: '操作',
     key: 'action',
-    width: 400,
+    width: 480,
     fixed: 'right' as const,
   },
 ]
