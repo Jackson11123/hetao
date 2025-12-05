@@ -45,7 +45,7 @@
       >
         <template #bodyCell="{ column, record }">
           <template v-if="column.key === 'action'">
-            <a-space :wrap="false">
+            <div class="action-buttons">
               <a @click="handleViewDetail(record)">查看详情</a>
               <a-divider type="vertical" />
               <a @click="handleEditRole(record)">编辑角色</a>
@@ -55,7 +55,7 @@
               <a @click="handleBan(record)" class="danger-link">封禁</a>
               <a-divider type="vertical" />
               <a @click="handleViewHomepage(record)">查看主页</a>
-            </a-space>
+            </div>
           </template>
         </template>
       </a-table>
@@ -107,7 +107,7 @@ const columns = [
   {
     title: '操作',
     key: 'action',
-    width: 400,
+    width: 420,
   },
 ]
 
@@ -192,5 +192,12 @@ const handleViewHomepage = (user: User) => {
 
 .danger-link:hover {
   color: #ff7875;
+}
+
+.action-buttons {
+  display: flex;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  align-items: center;
 }
 </style>
