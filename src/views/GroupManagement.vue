@@ -58,10 +58,6 @@
           </a-button>
         </a-form-item>
       </a-form>
-    </div>
-
-    <!-- 操作按钮区域 -->
-    <div class="action-area">
       <a-button type="primary" @click="handleCreate">
         <template #icon><PlusOutlined /></template>
         创建小组
@@ -290,10 +286,9 @@ const handleDelete = (group: Group) => {
   padding: 16px;
   background: #fafafa;
   border-radius: 4px;
-}
-
-.action-area {
-  margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
 }
 
 .table-area {

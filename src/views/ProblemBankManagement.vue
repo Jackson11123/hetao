@@ -6,6 +6,7 @@
 
     <!-- 操作按钮区域 -->
     <div class="action-area">
+      <div></div>
       <a-button type="primary" @click="handleCreate">
         <template #icon><PlusOutlined /></template>
         创建题库
@@ -165,6 +166,9 @@ const handleMoveDown = (index: number) => {
 
 .action-area {
   margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .table-area {
