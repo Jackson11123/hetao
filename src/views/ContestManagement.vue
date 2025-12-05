@@ -25,10 +25,6 @@
           </a-button>
         </a-form-item>
       </a-form>
-    </div>
-
-    <!-- 操作按钮区域 -->
-    <div class="action-area">
       <a-button type="primary" @click="handleCreate">
         <template #icon><PlusOutlined /></template>
         创建比赛
@@ -49,6 +45,16 @@
             <a-tag :color="getStatusColor(record.status)">
               {{ record.status }}
             </a-tag>
+          </template>
+          <template v-if="column.key === 'permission'">
+            <a-select
+              v-model:value="record.permission"
+              style="width: 110px"
+              @change="(val: string) => handlePermissionChange(record, val)"
+            >
+              <a-select-option value="公开">公开比赛</a-select-option>
+              <a-select-option value="私密">私密比赛</a-select-option>
+            </a-select>
           </template>
           <template v-if="column.key === 'action'">
             <div class="action-buttons">
@@ -151,7 +157,7 @@ const columns = [
     title: '权限',
     dataIndex: 'permission',
     key: 'permission',
-    width: 80,
+    width: 130,
   },
   {
     title: '操作',
@@ -234,6 +240,11 @@ const handleEdit = (contest: Contest) => {
 const handleDelete = (contest: Contest) => {
   message.warning(`删除比赛: ${contest.name}（原型展示）`)
 }
+
+// 权限变更
+const handlePermissionChange = (contest: Contest, permission: string) => {
+  message.success(`已将 ${contest.name} 的权限修改为: ${permission === '公开' ? '公开比赛' : '私密比赛'}`)
+}
 </script>
 
 <style scoped>
@@ -254,10 +265,9 @@ const handleDelete = (contest: Contest) => {
   padding: 16px;
   background: #fafafa;
   border-radius: 4px;
-}
-
-.action-area {
-  margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .table-area {
