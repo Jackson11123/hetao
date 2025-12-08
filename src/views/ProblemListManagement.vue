@@ -163,12 +163,12 @@ const handleCreate = () => {
 
 // 管理题目
 const handleManageProblems = (problemList: ProblemList) => {
-  message.info(`管理题目: ${problemList.title}（原型展示）`)
+  router.push({ name: 'ProblemListDetail', params: { id: problemList.id } })
 }
 
 // 完成情况
 const handleCompletionStatus = (problemList: ProblemList) => {
-  message.info(`查看完成情况: ${problemList.title}（原型展示）`)
+  router.push({ name: 'ProblemListCompletion', params: { id: problemList.id } })
 }
 
 // 查看题单

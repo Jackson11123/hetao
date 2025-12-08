@@ -201,7 +201,13 @@ const handleMove = (record: BankProblem) => {
 
 // 管理题解
 const handleManageSolutions = (record: BankProblem) => {
-  message.info(`管理题解: ${record.name}（原型展示）`)
+  router.push({
+    name: 'ProblemSolutionManagement',
+    params: {
+      bankId: bankId.value,
+      problemId: record.id
+    }
+  })
 }
 
 // 查看详情

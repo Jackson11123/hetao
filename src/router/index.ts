@@ -90,6 +90,18 @@ const routes: RouteRecordRaw[] = [
         meta: { title: '创建题单' }
       },
       {
+        path: 'problem-lists/:id',
+        name: 'ProblemListDetail',
+        component: () => import('../views/ProblemListDetail.vue'),
+        meta: { title: '题单题目管理' }
+      },
+      {
+        path: 'problem-lists/:id/completion',
+        name: 'ProblemListCompletion',
+        component: () => import('../views/ProblemListCompletion.vue'),
+        meta: { title: '题单完成情况' }
+      },
+      {
         path: 'problem-banks',
         name: 'ProblemBankManagement',
         component: () => import('../views/ProblemBankManagement.vue'),
@@ -124,6 +136,12 @@ const routes: RouteRecordRaw[] = [
         name: 'CreateObjectiveProblem',
         component: () => import('../views/CreateObjectiveProblem.vue'),
         meta: { title: '创建客观题' }
+      },
+      {
+        path: 'problem-banks/:bankId/problems/:problemId/solutions',
+        name: 'ProblemSolutionManagement',
+        component: () => import('../views/ProblemSolutionManagement.vue'),
+        meta: { title: '题解管理' }
       },
       {
         path: 'content',
