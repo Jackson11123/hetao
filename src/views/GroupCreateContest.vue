@@ -136,9 +136,11 @@
             <a-form-item label="比赛赛制" required>
               <a-select v-model:value="formData.format" placeholder="请选择比赛赛制">
                 <a-select-option value="OI">OI</a-select-option>
-                <a-select-option value="IOI">IOI</a-select-option>
                 <a-select-option value="ACM">ACM</a-select-option>
                 <a-select-option value="乐多">乐多</a-select-option>
+                <a-select-option value="IOI">IOI</a-select-option>
+                <a-select-option value="IOI(OFS)">IOI(OFS)</a-select-option>
+                <a-select-option value="严格IOI">严格IOI</a-select-option>
               </a-select>
             </a-form-item>
           </a-col>
@@ -156,6 +158,18 @@
                 <a-select-option value="private">私密比赛</a-select-option>
                 <a-select-option value="public">公开比赛</a-select-option>
               </a-select>
+            </a-form-item>
+          </a-col>
+        </a-row>
+
+        <!-- ACM赛制特有：是否开启封榜 -->
+        <a-row v-if="formData.format === 'ACM'" :gutter="24">
+          <a-col :span="8">
+            <a-form-item label="是否开启封榜">
+              <div class="switch-with-text">
+                <a-switch v-model:checked="formData.enableFreeze" />
+                <span class="switch-text">{{ formData.enableFreeze ? '是' : '否' }}</span>
+              </div>
             </a-form-item>
           </a-col>
         </a-row>
@@ -178,15 +192,39 @@
               </div>
             </a-form-item>
           </a-col>
+          <a-col :span="8">
+            <a-form-item label="是否在学生提交后展示客观题答案">
+              <div class="switch-with-text">
+                <a-switch v-model:checked="formData.showObjectiveAnswer" />
+                <span class="switch-text">{{ formData.showObjectiveAnswer ? '是' : '否' }}</span>
+              </div>
+            </a-form-item>
+          </a-col>
         </a-row>
 
-        <!-- 是否向核桃OJ贡献 -->
-        <a-row :gutter="24">
+        <!-- 课导老师是否允许查看成绩表 -->
+        <a-form-item label="课导老师是否允许查看成绩表">
+          <div class="switch-with-text">
+            <a-switch v-model:checked="formData.teacherViewScore" />
+            <span class="switch-text">{{ formData.teacherViewScore ? '是' : '否' }}</span>
+          </div>
+        </a-form-item>
+
+        <!-- OI/IOI/IOI(OFS)/严格IOI赛制特有选项 -->
+        <a-row v-if="isOIType" :gutter="24">
           <a-col :span="8">
-            <a-form-item label="是否向核桃OJ贡献">
+            <a-form-item label="是否隐藏用户端提交结果">
               <div class="switch-with-text">
-                <a-switch v-model:checked="formData.contributeToOJ" />
-                <span class="switch-text">{{ formData.contributeToOJ ? '是' : '否' }}</span>
+                <a-switch v-model:checked="formData.hideSubmitResult" />
+                <span class="switch-text">{{ formData.hideSubmitResult ? '是' : '否' }}</span>
+              </div>
+            </a-form-item>
+          </a-col>
+          <a-col :span="8" v-if="formData.format === 'OI'">
+            <a-form-item label="个人比赛时间结束是否可看成绩">
+              <div class="switch-with-text">
+                <a-switch v-model:checked="formData.viewScoreAfterEnd" />
+                <span class="switch-text">{{ formData.viewScoreAfterEnd ? '是' : '否' }}</span>
               </div>
             </a-form-item>
           </a-col>
@@ -225,7 +263,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { message } from 'ant-design-vue'
 import type { Dayjs } from 'dayjs'
@@ -280,11 +318,24 @@ const formData = reactive({
   format: undefined as string | undefined,
   ioMode: 'standard',
   permission: 'private',
+  // ACM特有
+  enableFreeze: false,
+  // 通用开关
   allowPostSubmit: false,
   requirePassword: false,
-  contributeToOJ: true,
+  showObjectiveAnswer: false,
+  teacherViewScore: true,
+  // OI类型特有
+  hideSubmitResult: false,
+  viewScoreAfterEnd: false,
+  // 展示选项
   showDifficulty: false,
   showTags: false,
+})
+
+// 判断是否为OI类型赛制
+const isOIType = computed(() => {
+  return ['OI', 'IOI', 'IOI(OFS)', '严格IOI'].includes(formData.format || '')
 })
 
 // 预览相关

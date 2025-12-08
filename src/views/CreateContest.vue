@@ -167,7 +167,7 @@
           </a-col>
         </a-row>
 
-        <!-- 通用开关：赛后是否允许提交、是否需要口令 -->
+        <!-- 通用开关：赛后是否允许提交、是否需要口令、是否在学生提交后展示客观题答案 -->
         <a-row :gutter="24">
           <a-col :span="8">
             <a-form-item label="赛后是否允许提交">
@@ -177,6 +177,11 @@
           <a-col :span="8">
             <a-form-item label="是否需要口令">
               <a-switch v-model:checked="formData.needPassword" checked-children="是" un-checked-children="否" />
+            </a-form-item>
+          </a-col>
+          <a-col :span="8">
+            <a-form-item label="是否在学生提交后展示客观题答案">
+              <a-switch v-model:checked="formData.showObjectiveAnswer" checked-children="是" un-checked-children="否" />
             </a-form-item>
           </a-col>
         </a-row>
@@ -275,6 +280,7 @@ const formData = reactive({
   // 通用开关
   allowPostSubmit: false,
   needPassword: false,
+  showObjectiveAnswer: false,
   teacherViewScore: true,
   // OI类型特有
   hideSubmitResult: false,
