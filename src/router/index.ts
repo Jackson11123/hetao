@@ -134,7 +134,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'submissions',
         name: 'Submissions',
-        component: () => import('../views/Home.vue'),
+        component: () => import('../views/Submissions.vue'),
         meta: { title: '全部提交' }
       }
     ]

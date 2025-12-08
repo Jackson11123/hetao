@@ -1,9 +1,10 @@
 <template>
   <div class="header-nav">
-    <div class="logo">
+    <router-link to="/" class="logo">
       <img src="https://via.placeholder.com/32" alt="Logo" class="logo-img" />
-      <span class="logo-text">核桃OJ后台</span>
-    </div>
+      <span class="logo-text">核桃OJ</span>
+      <span class="logo-admin">后台管理</span>
+    </router-link>
     
     <a-menu
       v-model:selectedKeys="selectedKeys"
@@ -143,6 +144,7 @@ watch(
   align-items: center;
   margin-right: 24px;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .logo-img {
@@ -154,7 +156,13 @@ watch(
 .logo-text {
   font-size: 18px;
   font-weight: 600;
-  color: #1890ff;
+  color: #ff6a00;
+}
+
+.logo-admin {
+  font-size: 14px;
+  color: #666;
+  margin-left: 8px;
 }
 
 .nav-menu {
