@@ -24,6 +24,12 @@ const routes: RouteRecordRaw[] = [
         meta: { title: '用户管理' }
       },
       {
+        path: 'users/:id',
+        name: 'UserDetail',
+        component: () => import('../views/UserDetail.vue'),
+        meta: { title: '用户详情' }
+      },
+      {
         path: 'groups',
         name: 'GroupManagement',
         component: () => import('../views/GroupManagement.vue'),
@@ -178,6 +184,24 @@ const routes: RouteRecordRaw[] = [
         name: 'Submissions',
         component: () => import('../views/Submissions.vue'),
         meta: { title: '全部提交' }
+      },
+      {
+        path: 'tasks',
+        name: 'TaskManagement',
+        component: () => import('../views/TaskManagement.vue'),
+        meta: { title: '任务管理' }
+      },
+      {
+        path: 'tasks/create-normal',
+        name: 'CreateNormalTask',
+        component: () => import('../views/CreateNormalTask.vue'),
+        meta: { title: '创建普通任务' }
+      },
+      {
+        path: 'tasks/create-guzi',
+        name: 'CreateGuziTask',
+        component: () => import('../views/CreateGuziTask.vue'),
+        meta: { title: '创建抽谷子任务' }
       }
     ]
   },

@@ -48,15 +48,15 @@
       </a-menu-item>
 
       <a-sub-menu key="create" title="创建">
-        <a-menu-item key="create-problem-bank">创建题库</a-menu-item>
-        <a-menu-item key="create-problem-list">创建题单</a-menu-item>
-        <a-menu-item key="create-contest">创建比赛</a-menu-item>
-        <a-menu-item key="create-group">创建小组</a-menu-item>
+        <a-menu-item key="create-problem-bank" @click="handleCreateProblemBank">创建题库</a-menu-item>
+        <a-menu-item key="create-problem-list" @click="handleCreateProblemList">创建题单</a-menu-item>
+        <a-menu-item key="create-contest" @click="handleCreateContest">创建比赛</a-menu-item>
+        <a-menu-item key="create-group" @click="handleCreateGroup">创建小组</a-menu-item>
       </a-sub-menu>
       
       <a-sub-menu key="incentive" title="激励">
-        <a-menu-item key="incentive-points">积分管理</a-menu-item>
-        <a-menu-item key="incentive-badges">徽章管理</a-menu-item>
+        <a-menu-item key="task-management" @click="handleTaskManagement">任务管理</a-menu-item>
+        <a-menu-item key="reward-management" @click="handleRewardManagement">奖励配置</a-menu-item>
       </a-sub-menu>
       
       <a-sub-menu key="home-config" title="首页配置">
@@ -94,7 +94,7 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 interface Props {
   currentUser: {
@@ -106,8 +106,35 @@ interface Props {
 const props = defineProps<Props>()
 
 const route = useRoute()
+const router = useRouter()
 const selectedKeys = ref<string[]>([''])
 const language = ref('cpp')
+
+// 创建菜单跳转
+const handleCreateProblemBank = () => {
+  router.push({ name: 'CreateProblemBank' })
+}
+
+const handleCreateProblemList = () => {
+  router.push({ name: 'CreateProblemList' })
+}
+
+const handleCreateContest = () => {
+  router.push({ name: 'CreateContest' })
+}
+
+const handleCreateGroup = () => {
+  router.push({ name: 'CreateGroup' })
+}
+
+// 激励菜单跳转
+const handleTaskManagement = () => {
+  router.push({ name: 'TaskManagement' })
+}
+
+const handleRewardManagement = () => {
+  router.push({ name: 'TaskManagement' })
+}
 
 // 根据路由更新选中的菜单项
 watch(

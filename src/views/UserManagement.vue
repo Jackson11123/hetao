@@ -60,15 +60,43 @@
         </template>
       </a-table>
     </div>
+
+    <!-- 编辑角色弹窗 -->
+    <a-modal v-model:open="editRoleVisible" title="修改用户角色" @ok="handleEditRoleOk">
+      <a-select v-model:value="editRoleForm.role" style="width: 100%">
+        <a-select-option value="普通用户">普通用户</a-select-option>
+        <a-select-option value="管理员">管理员</a-select-option>
+        <a-select-option value="课导老师">课导老师</a-select-option>
+        <a-select-option value="教研老师">教研老师</a-select-option>
+        <a-select-option value="技校">技校</a-select-option>
+      </a-select>
+    </a-modal>
+
+    <!-- 编辑奖项（CCF等级）弹窗 -->
+    <a-modal v-model:open="editAwardVisible" title="修改用户CCF等级" @ok="handleEditAwardOk">
+      <a-select v-model:value="editAwardForm.ccfLevel" style="width: 100%">
+        <a-select-option value="无等级">无等级</a-select-option>
+        <a-select-option value="CCF 3级">CCF 3级</a-select-option>
+        <a-select-option value="CCF 4级">CCF 4级</a-select-option>
+        <a-select-option value="CCF 5级">CCF 5级</a-select-option>
+        <a-select-option value="CCF 6级">CCF 6级</a-select-option>
+        <a-select-option value="CCF 7级">CCF 7级</a-select-option>
+        <a-select-option value="CCF 8级">CCF 8级</a-select-option>
+        <a-select-option value="CCF 9级">CCF 9级</a-select-option>
+      </a-select>
+    </a-modal>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, reactive } from 'vue'
+import { useRouter } from 'vue-router'
 import { SearchOutlined } from '@ant-design/icons-vue'
 import { message } from 'ant-design-vue'
 import type { User } from '../types'
 import { mockUsers } from '../mock/data'
+
+const router = useRouter()
 
 // 用户列表数据
 const users = ref<User[]>([...mockUsers])
@@ -134,19 +162,46 @@ const handleReset = () => {
   searchNickname.value = ''
 }
 
+// 编辑角色弹窗
+const editRoleVisible = ref(false)
+const editRoleForm = reactive({ userId: '', role: '' })
+const currentEditUser = ref<User | null>(null)
+
+// 编辑奖项弹窗
+const editAwardVisible = ref(false)
+const editAwardForm = reactive({ userId: '', ccfLevel: '无等级' })
+
 // 查看详情
 const handleViewDetail = (user: User) => {
-  message.info(`查看用户详情: ${user.nickname}（原型展示）`)
+  router.push({ name: 'UserDetail', params: { id: user.userId } })
 }
 
 // 编辑角色
 const handleEditRole = (user: User) => {
-  message.info(`编辑用户角色: ${user.nickname}（原型展示）`)
+  currentEditUser.value = user
+  editRoleForm.userId = user.userId
+  editRoleForm.role = user.role
+  editRoleVisible.value = true
+}
+
+const handleEditRoleOk = () => {
+  if (currentEditUser.value) {
+    currentEditUser.value.role = editRoleForm.role
+    message.success('角色修改成功')
+  }
+  editRoleVisible.value = false
 }
 
 // 编辑奖项
 const handleEditAward = (user: User) => {
-  message.info(`编辑用户奖项: ${user.nickname}（原型展示）`)
+  editAwardForm.userId = user.userId
+  editAwardForm.ccfLevel = '无等级'
+  editAwardVisible.value = true
+}
+
+const handleEditAwardOk = () => {
+  message.success('CCF等级修改成功')
+  editAwardVisible.value = false
 }
 
 // 封禁用户
