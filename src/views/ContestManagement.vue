@@ -211,32 +211,32 @@ const handleCreate = () => {
 
 // 全部提交
 const handleAllSubmissions = (contest: Contest) => {
-  message.info(`查看全部提交: ${contest.name}（原型展示）`)
+  router.push({ name: 'ContestDetail', params: { id: contest.id }, query: { tab: 'submissions' } })
 }
 
 // 管理题目
 const handleManageProblems = (contest: Contest) => {
-  message.info(`管理题目: ${contest.name}（原型展示）`)
+  router.push({ name: 'ContestDetail', params: { id: contest.id }, query: { tab: 'problems' } })
 }
 
 // 管理公告
 const handleManageAnnouncements = (contest: Contest) => {
-  message.info(`管理公告: ${contest.name}（原型展示）`)
+  router.push({ name: 'ContestDetail', params: { id: contest.id }, query: { tab: 'announcements' } })
 }
 
 // 成绩表
 const handleScoreboard = (contest: Contest) => {
-  message.info(`查看成绩表: ${contest.name}（原型展示）`)
+  router.push({ name: 'ContestDetail', params: { id: contest.id }, query: { tab: 'scoreboard' } })
 }
 
 // 查看比赛
 const handleView = (contest: Contest) => {
-  message.info(`查看比赛: ${contest.name}（原型展示）`)
+  router.push({ name: 'ViewContest', params: { id: contest.id } })
 }
 
 // 编辑比赛
 const handleEdit = (contest: Contest) => {
-  message.info(`编辑比赛: ${contest.name}（原型展示）`)
+  router.push({ name: 'EditContest', params: { id: contest.id } })
 }
 
 // 删除比赛

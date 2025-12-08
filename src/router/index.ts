@@ -78,6 +78,30 @@ const routes: RouteRecordRaw[] = [
         meta: { title: '创建比赛' }
       },
       {
+        path: 'contests/:id',
+        name: 'ContestDetail',
+        component: () => import('../views/ContestDetail.vue'),
+        meta: { title: '比赛详情' }
+      },
+      {
+        path: 'contests/:id/edit',
+        name: 'EditContest',
+        component: () => import('../views/EditContest.vue'),
+        meta: { title: '编辑比赛' }
+      },
+      {
+        path: 'contests/:id/view',
+        name: 'ViewContest',
+        component: () => import('../views/ViewContest.vue'),
+        meta: { title: '查看比赛' }
+      },
+      {
+        path: 'contests/:id/announcement/create',
+        name: 'CreateContestAnnouncement',
+        component: () => import('../views/CreateContestAnnouncement.vue'),
+        meta: { title: '创建比赛公告' }
+      },
+      {
         path: 'problem-lists',
         name: 'ProblemListManagement',
         component: () => import('../views/ProblemListManagement.vue'),
