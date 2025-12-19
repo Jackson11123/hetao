@@ -181,6 +181,93 @@
           <p>数据点配置功能开发中...</p>
         </div>
       </a-tab-pane>
+
+      <a-tab-pane key="solution" tab="官方题解上传">
+        <div class="solution-upload">
+          <!-- 题解标题行 -->
+          <div class="solution-title-row">
+            <span class="required-label">* 题解标题</span>
+            <a-input
+              v-model:value="solutionTitle"
+              placeholder="好的标题可以吸引更多人哦"
+              :maxlength="50"
+              class="solution-title-input"
+            />
+            <span class="char-count">{{ solutionTitle.length }}/50</span>
+            <a-checkbox v-model:checked="syncPublishAcademic" class="sync-checkbox">同步发布学术版</a-checkbox>
+          </div>
+
+          <!-- Markdown编辑器 -->
+          <div class="markdown-editor solution-editor">
+            <div class="editor-toolbar">
+              <a-space>
+                <a-button size="small" @click="insertSolutionFormat('bold')"><BoldOutlined /></a-button>
+                <a-button size="small" @click="insertSolutionFormat('underline')"><UnderlineOutlined /></a-button>
+                <a-button size="small" @click="insertSolutionFormat('italic')"><ItalicOutlined /></a-button>
+                <a-button size="small" @click="insertSolutionFormat('strikethrough')"><StrikethroughOutlined /></a-button>
+                <a-button size="small" @click="insertSolutionFormat('heading')">T</a-button>
+                <a-divider type="vertical" />
+                <a-button size="small" @click="insertSolutionFormat('ol')"><OrderedListOutlined /></a-button>
+                <a-button size="small" @click="insertSolutionFormat('ul')"><UnorderedListOutlined /></a-button>
+                <a-divider type="vertical" />
+                <a-button size="small" @click="insertSolutionFormat('code')">&lt;&gt;</a-button>
+                <a-button size="small" @click="insertSolutionFormat('codeBlock')">{{ '{}' }}</a-button>
+                <a-button size="small" @click="insertSolutionFormat('link')"><LinkOutlined /></a-button>
+                <a-button size="small" @click="insertSolutionFormat('image')"><PictureOutlined /></a-button>
+                <a-button size="small" @click="insertSolutionFormat('table')"><TableOutlined /></a-button>
+                <a-button size="small" @click="insertSolutionFormat('formula')">∑</a-button>
+              </a-space>
+              <a-space class="toolbar-right">
+                <a-button size="small" @click="handleUndo"><UndoOutlined /></a-button>
+                <a-button size="small" @click="handleRedo"><RedoOutlined /></a-button>
+                <a-button size="small" @click="toggleSolutionFullscreen"><FullscreenOutlined /></a-button>
+                <a-button size="small" @click="toggleSolutionSplit"><ColumnWidthOutlined /></a-button>
+                <a-button size="small" @click="toggleSolutionPreview"><EyeOutlined /></a-button>
+              </a-space>
+            </div>
+            <div class="editor-content">
+              <div class="editor-input">
+                <a-textarea
+                  v-model:value="solutionContent"
+                  :auto-size="{ minRows: 15, maxRows: 25 }"
+                  placeholder="请输入题解内容（支持Markdown格式）"
+                />
+                <div class="word-count">字数: {{ solutionContent.length }}</div>
+              </div>
+              <div class="editor-preview" v-if="showSolutionPreview">
+                <div class="preview-content">
+                  <h3>题意</h3>
+                  <h3>解析</h3>
+                  <h3>标程</h3>
+                  <div class="code-block">
+                    <div class="code-lang">cpp</div>
+                    <pre><code>#include &lt;iostream&gt;
+using namespace std;
+int main()
+{
+    int a, b;
+    cin >> a >> b;
+    cout &lt;&lt; a + b;
+    return 0;
+}</code></pre>
+                  </div>
+                  <h3>后记</h3>
+                </div>
+              </div>
+            </div>
+            <div class="editor-footer">
+              <span class="sync-scroll-label">同步滚动</span>
+              <a-checkbox v-model:checked="solutionSyncScroll" />
+            </div>
+          </div>
+
+          <!-- 操作按钮 -->
+          <div class="solution-actions">
+            <a-button type="primary" @click="handleSaveSolution">保存</a-button>
+            <a-button @click="handleCancelSolution">取消</a-button>
+          </div>
+        </div>
+      </a-tab-pane>
     </a-tabs>
     </div>
   </div>
@@ -210,6 +297,9 @@ import {
   CodeSandboxOutlined,
   MenuUnfoldOutlined,
   MenuOutlined,
+  UndoOutlined,
+  RedoOutlined,
+  ColumnWidthOutlined,
 } from '@ant-design/icons-vue'
 import { mockTags, mockProblemBanks } from '../mock/data'
 
@@ -229,6 +319,73 @@ onMounted(() => {
 
 // 当前Tab
 const activeTab = ref('config')
+
+// 官方题解
+const solutionTitle = ref('')
+const solutionContent = ref(`### 题意
+
+### 解析
+
+### 标程
+\`\`\`cpp
+#include <iostream>
+using namespace std;
+int main()
+{
+    int a, b;
+    cin >> a >> b;
+    cout << a + b;
+    return 0;
+}
+\`\`\`
+
+### 后记
+`)
+const syncPublishAcademic = ref(true)
+const showSolutionPreview = ref(true)
+const solutionSyncScroll = ref(true)
+
+const insertSolutionFormat = (type: string) => {
+  message.info(`插入${type}格式（原型展示）`)
+}
+
+const handleUndo = () => {
+  message.info('撤销（原型展示）')
+}
+
+const handleRedo = () => {
+  message.info('重做（原型展示）')
+}
+
+const toggleSolutionFullscreen = () => {
+  message.info('切换全屏模式（原型展示）')
+}
+
+const toggleSolutionSplit = () => {
+  message.info('切换分栏模式（原型展示）')
+}
+
+const toggleSolutionPreview = () => {
+  showSolutionPreview.value = !showSolutionPreview.value
+}
+
+const handleSaveSolution = () => {
+  if (!solutionTitle.value) {
+    message.warning('请输入题解标题')
+    return
+  }
+  if (!solutionContent.value) {
+    message.warning('请输入题解内容')
+    return
+  }
+  message.success('官方题解保存成功（原型展示）')
+}
+
+const handleCancelSolution = () => {
+  solutionTitle.value = ''
+  solutionContent.value = ''
+  activeTab.value = 'config'
+}
 
 // 表单数据
 const formData = reactive({
@@ -481,5 +638,97 @@ const handleCancel = () => {
   padding: 40px;
   text-align: center;
   color: #999;
+}
+
+.solution-upload {
+  padding: 24px 0;
+}
+
+.solution-title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.required-label {
+  color: #ff4d4f;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.required-label::before {
+  content: '';
+}
+
+.solution-title-input {
+  flex: 1;
+  max-width: 500px;
+}
+
+.char-count {
+  color: #999;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.sync-checkbox {
+  margin-left: auto;
+}
+
+.solution-editor {
+  margin-bottom: 24px;
+}
+
+.solution-editor .editor-toolbar :deep(.ant-divider) {
+  margin: 0 4px;
+  height: 20px;
+}
+
+.solution-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.code-block {
+  background: #f6f8fa;
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 12px 0;
+}
+
+.code-lang {
+  background: #e8e8e8;
+  padding: 4px 12px;
+  font-size: 12px;
+  color: #1890ff;
+}
+
+.code-block pre {
+  margin: 0;
+  padding: 12px;
+  overflow-x: auto;
+}
+
+.code-block code {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.preview-content h3 {
+  margin: 20px 0 12px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.preview-content h3:first-child {
+  margin-top: 0;
+}
+
+.sync-scroll-label {
+  margin-right: 8px;
+  color: #666;
+  font-size: 13px;
 }
 </style>

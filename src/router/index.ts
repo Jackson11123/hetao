@@ -72,6 +72,30 @@ const routes: RouteRecordRaw[] = [
         meta: { title: '创建比赛' }
       },
       {
+        path: 'groups/:id/contests/:contestId',
+        name: 'GroupContestDetail',
+        component: () => import('../views/GroupContestDetail.vue'),
+        meta: { title: '比赛详情' }
+      },
+      {
+        path: 'groups/:id/contests/:contestId/edit',
+        name: 'GroupEditContest',
+        component: () => import('../views/GroupEditContest.vue'),
+        meta: { title: '编辑比赛' }
+      },
+      {
+        path: 'groups/:id/contests/:contestId/view',
+        name: 'GroupViewContest',
+        component: () => import('../views/GroupViewContest.vue'),
+        meta: { title: '查看比赛' }
+      },
+      {
+        path: 'groups/:id/contests/:contestId/announcement/create',
+        name: 'GroupCreateContestAnnouncement',
+        component: () => import('../views/GroupCreateContestAnnouncement.vue'),
+        meta: { title: '创建比赛公告' }
+      },
+      {
         path: 'contests',
         name: 'ContestManagement',
         component: () => import('../views/ContestManagement.vue'),

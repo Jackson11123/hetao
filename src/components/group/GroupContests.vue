@@ -231,27 +231,27 @@ const handleCreate = () => {
 }
 
 const handleAllSubmissions = (record: Contest) => {
-  message.info(`查看全部提交: ${record.name}（原型展示）`)
+  router.push({ name: 'GroupContestDetail', params: { id: groupId, contestId: record.id }, query: { tab: 'submissions' } })
 }
 
 const handleRanking = (record: Contest) => {
-  message.info(`查看成绩表: ${record.name}（原型展示）`)
+  router.push({ name: 'GroupContestDetail', params: { id: groupId, contestId: record.id }, query: { tab: 'scoreboard' } })
 }
 
 const handleManageProblems = (record: Contest) => {
-  message.info(`管理题目: ${record.name}（原型展示）`)
+  router.push({ name: 'GroupContestDetail', params: { id: groupId, contestId: record.id }, query: { tab: 'problems' } })
 }
 
 const handleAnnouncement = (record: Contest) => {
-  message.info(`管理公告: ${record.name}（原型展示）`)
+  router.push({ name: 'GroupContestDetail', params: { id: groupId, contestId: record.id }, query: { tab: 'announcements' } })
 }
 
 const handleView = (record: Contest) => {
-  message.info(`查看比赛: ${record.name}（原型展示）`)
+  router.push({ name: 'GroupViewContest', params: { id: groupId, contestId: record.id } })
 }
 
 const handleEdit = (record: Contest) => {
-  message.info(`编辑比赛: ${record.name}（原型展示）`)
+  router.push({ name: 'GroupEditContest', params: { id: groupId, contestId: record.id } })
 }
 
 const handleRemove = (record: Contest) => {
