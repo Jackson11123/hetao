@@ -198,6 +198,12 @@ const routes: RouteRecordRaw[] = [
         meta: { title: '题解管理' }
       },
       {
+        path: 'problem-banks/:bankId/problems/:problemId/solutions/create',
+        name: 'CreateOfficialSolution',
+        component: () => import('../views/CreateOfficialSolution.vue'),
+        meta: { title: '创建题解' }
+      },
+      {
         path: 'content',
         name: 'ContentManagement',
         component: () => import('../views/ContentManagement.vue'),

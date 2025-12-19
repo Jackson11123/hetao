@@ -18,7 +18,9 @@
         <a-button type="link" @click="handleCopyFromOther">从其他题目复制</a-button>
       </div>
 
-      <a-form :model="formData" layout="vertical" class="problem-form">
+      <a-tabs v-model:activeKey="activeTab">
+        <a-tab-pane key="config" tab="题目配置">
+          <a-form :model="formData" layout="vertical" class="problem-form">
         <!-- 标题 -->
         <a-form-item label="标题" required>
           <a-input v-model:value="formData.title" placeholder="请输入标题" />
@@ -141,7 +143,92 @@
             <a-button @click="handleCancel">取 消</a-button>
           </a-space>
         </a-form-item>
-      </a-form>
+          </a-form>
+        </a-tab-pane>
+
+        <a-tab-pane key="solution" tab="题解上传">
+          <div class="solution-upload">
+            <!-- 题解标题行 -->
+            <div class="solution-title-row">
+              <span class="required-label">* 标题</span>
+              <a-input
+                v-model:value="solutionTitle"
+                placeholder="好的标题可以吸引更多人哦"
+                :maxlength="50"
+                class="solution-title-input"
+              />
+              <span class="char-count">{{ solutionTitle.length }}/50</span>
+              <a-checkbox v-model:checked="syncPublishAcademic" class="sync-checkbox">同步发布学术版</a-checkbox>
+            </div>
+
+            <!-- Markdown编辑器 -->
+            <div class="markdown-editor solution-editor">
+              <div class="editor-toolbar">
+                <a-space>
+                  <a-button size="small" @click="insertSolutionFormat('bold')"><BoldOutlined /></a-button>
+                  <a-button size="small" @click="insertSolutionFormat('underline')"><UnderlineOutlined /></a-button>
+                  <a-button size="small" @click="insertSolutionFormat('italic')"><ItalicOutlined /></a-button>
+                  <a-button size="small" @click="insertSolutionFormat('strikethrough')"><StrikethroughOutlined /></a-button>
+                  <a-divider type="vertical" />
+                  <a-button size="small" @click="insertSolutionFormat('heading')">H<sub>1</sub></a-button>
+                  <a-button size="small" @click="insertSolutionFormat('subscript')">x<sub>2</sub></a-button>
+                  <a-button size="small" @click="insertSolutionFormat('superscript')">x<sup>2</sup></a-button>
+                  <a-button size="small" @click="insertSolutionFormat('quote')">{{ '{}' }}</a-button>
+                  <a-divider type="vertical" />
+                  <a-button size="small" @click="insertSolutionFormat('ol')"><OrderedListOutlined /></a-button>
+                  <a-button size="small" @click="insertSolutionFormat('ul')"><UnorderedListOutlined /></a-button>
+                  <a-button size="small" @click="insertSolutionFormat('checklist')"><CheckSquareOutlined /></a-button>
+                  <a-divider type="vertical" />
+                  <a-button size="small" @click="insertSolutionFormat('code')">&lt;&gt;</a-button>
+                  <a-button size="small" @click="insertSolutionFormat('inlineCode')"><MinusOutlined /></a-button>
+                  <a-button size="small" @click="insertSolutionFormat('link')"><LinkOutlined /></a-button>
+                  <a-button size="small" @click="insertSolutionFormat('image')"><PictureOutlined /></a-button>
+                  <a-button size="small" @click="insertSolutionFormat('upload')"><UploadOutlined /></a-button>
+                  <a-divider type="vertical" />
+                  <a-button size="small" @click="insertSolutionFormat('table')"><TableOutlined /></a-button>
+                  <a-button size="small" @click="insertSolutionFormat('chart')"><BarChartOutlined /></a-button>
+                  <a-button size="small" @click="insertSolutionFormat('formula')"><FunctionOutlined /></a-button>
+                  <a-divider type="vertical" />
+                  <a-button size="small" @click="handleUndo"><UndoOutlined /></a-button>
+                  <a-button size="small" @click="handleRedo"><RedoOutlined /></a-button>
+                </a-space>
+                <a-space class="toolbar-right">
+                  <a-button size="small" @click="toggleSolutionFullscreen"><FullscreenOutlined /></a-button>
+                  <a-button size="small" @click="toggleSolutionGrid"><AppstoreOutlined /></a-button>
+                  <a-button size="small" @click="toggleSolutionPreview"><EyeOutlined /></a-button>
+                  <a-button size="small" @click="toggleSolutionCode"><CodeOutlined /></a-button>
+                  <a-button size="small" @click="toggleSolutionMenu"><MenuOutlined /></a-button>
+                </a-space>
+              </div>
+              <div class="editor-content">
+                <div class="editor-input">
+                  <a-textarea
+                    v-model:value="solutionContent"
+                    :auto-size="{ minRows: 18, maxRows: 25 }"
+                    placeholder="请输入题解内容（支持Markdown格式）"
+                  />
+                  <div class="word-count">字数: {{ solutionContent.length }}</div>
+                </div>
+                <div class="editor-preview" v-if="showSolutionPreview">
+                  <div class="preview-content">
+                    <!-- 预览内容 -->
+                  </div>
+                </div>
+              </div>
+              <div class="editor-footer">
+                <span class="sync-scroll-label">同步滚动</span>
+                <a-checkbox v-model:checked="solutionSyncScroll" />
+              </div>
+            </div>
+
+            <!-- 操作按钮 -->
+            <div class="solution-actions">
+              <a-button type="primary" @click="handleSaveSolution">保存</a-button>
+              <a-button @click="handleCancelSolution">取消</a-button>
+            </div>
+          </div>
+        </a-tab-pane>
+      </a-tabs>
     </div>
   </div>
 </template>
@@ -170,6 +257,13 @@ import {
   CodeSandboxOutlined,
   MenuUnfoldOutlined,
   MenuOutlined,
+  UndoOutlined,
+  RedoOutlined,
+  CheckSquareOutlined,
+  MinusOutlined,
+  BarChartOutlined,
+  FunctionOutlined,
+  AppstoreOutlined,
 } from '@ant-design/icons-vue'
 import { mockTags, mockProblemBanks } from '../mock/data'
 
@@ -194,6 +288,66 @@ onMounted(() => {
     bankName.value = bank.name
   }
 })
+
+// 当前Tab
+const activeTab = ref('config')
+
+// 题解上传相关
+const solutionTitle = ref('')
+const solutionContent = ref('')
+const syncPublishAcademic = ref(true)
+const showSolutionPreview = ref(true)
+const solutionSyncScroll = ref(true)
+
+const insertSolutionFormat = (type: string) => {
+  message.info(`插入${type}格式（原型展示）`)
+}
+
+const handleUndo = () => {
+  message.info('撤销（原型展示）')
+}
+
+const handleRedo = () => {
+  message.info('重做（原型展示）')
+}
+
+const toggleSolutionFullscreen = () => {
+  message.info('切换全屏模式（原型展示）')
+}
+
+const toggleSolutionGrid = () => {
+  message.info('切换网格模式（原型展示）')
+}
+
+const toggleSolutionPreview = () => {
+  showSolutionPreview.value = !showSolutionPreview.value
+}
+
+const toggleSolutionCode = () => {
+  message.info('切换代码模式（原型展示）')
+}
+
+const toggleSolutionMenu = () => {
+  message.info('切换菜单（原型展示）')
+}
+
+const handleSaveSolution = () => {
+  if (!solutionTitle.value) {
+    message.warning('请输入题解标题')
+    return
+  }
+  if (!solutionContent.value) {
+    message.warning('请输入题解内容')
+    return
+  }
+  message.success('题解保存成功（原型展示）')
+}
+
+const handleCancelSolution = () => {
+  solutionTitle.value = ''
+  solutionContent.value = ''
+  activeTab.value = 'config'
+}
 
 // 表单数据
 const formData = reactive({
@@ -431,5 +585,58 @@ const handleCancel = () => {
 .switch-text {
   color: #999;
   font-size: 14px;
+}
+
+/* 题解上传样式 */
+.solution-upload {
+  padding: 24px 0;
+}
+
+.solution-title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.required-label {
+  color: #ff4d4f;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.solution-title-input {
+  flex: 1;
+  max-width: 500px;
+}
+
+.char-count {
+  color: #999;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.sync-checkbox {
+  margin-left: auto;
+}
+
+.solution-editor {
+  margin-bottom: 24px;
+}
+
+.solution-editor .editor-toolbar :deep(.ant-divider) {
+  margin: 0 4px;
+  height: 20px;
+}
+
+.solution-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.sync-scroll-label {
+  margin-right: 8px;
+  color: #666;
+  font-size: 13px;
 }
 </style>

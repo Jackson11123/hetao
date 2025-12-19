@@ -12,7 +12,7 @@
 
     <div class="page-header">
       <h2>题解管理</h2>
-      <a-button type="primary" @click="handleAddSolution">管理题解</a-button>
+      <a-button type="primary" @click="handleCreateSolution">新增题解</a-button>
     </div>
 
     <!-- 题解表格 -->
@@ -32,14 +32,10 @@
             <span :class="record.reportCount > 0 ? 'text-warning' : ''">{{ record.reportCount }}</span>
           </template>
           <template v-else-if="column.key === 'status'">
-            <span>{{ record.status }}</span>
-          </template>
-          <template v-else-if="column.key === 'action'">
-            <a-space>
-              <a @click="handleManage(record)">管理</a>
-              <a-divider type="vertical" />
-              <a @click="handleDelete(record)" class="danger-link">删除</a>
-            </a-space>
+            <div class="status-cell">
+              <span>{{ record.status }}</span>
+              <span v-if="record.isOfficial" class="official-tag">官方</span>
+            </div>
           </template>
         </template>
       </a-table>
@@ -63,6 +59,7 @@ interface ProblemSolution {
   reportCount: number
   submittedAt: string
   status: string
+  isOfficial: boolean
 }
 
 const route = useRoute()
@@ -81,7 +78,7 @@ const problemNameMap: Record<string, string> = {
   P10568: 'BTY杯测题专用'
 }
 
-// 模拟题解数据（不包含relatedProblem，统一使用当前题目）
+// 模拟题解数据
 const solutions = ref<ProblemSolution[]>([
   {
     id: '50342',
@@ -93,7 +90,8 @@ const solutions = ref<ProblemSolution[]>([
     commentCount: 2,
     reportCount: 0,
     submittedAt: '2025-06-06 13:00:49',
-    status: '公开'
+    status: '公开',
+    isOfficial: true
   },
   {
     id: '50432',
@@ -105,7 +103,8 @@ const solutions = ref<ProblemSolution[]>([
     commentCount: 0,
     reportCount: 0,
     submittedAt: '2025-06-06 20:36:34',
-    status: '公开'
+    status: '公开',
+    isOfficial: false
   },
   {
     id: '57195',
@@ -117,7 +116,8 @@ const solutions = ref<ProblemSolution[]>([
     commentCount: 1,
     reportCount: 0,
     submittedAt: '2025-06-23 10:55:47',
-    status: '公开'
+    status: '公开',
+    isOfficial: false
   },
   {
     id: '60687',
@@ -129,7 +129,8 @@ const solutions = ref<ProblemSolution[]>([
     commentCount: 0,
     reportCount: 0,
     submittedAt: '2025-07-04 07:30:14',
-    status: '公开'
+    status: '公开',
+    isOfficial: false
   }
 ])
 
@@ -143,8 +144,7 @@ const columns = [
   { title: '评论数', dataIndex: 'commentCount', key: 'commentCount', width: 80 },
   { title: '被举报次数', key: 'reportCount', width: 100 },
   { title: '提交时间', dataIndex: 'submittedAt', key: 'submittedAt', width: 160 },
-  { title: '状态', key: 'status', width: 80 },
-  { title: '操作', key: 'action', width: 120, fixed: 'right' as const }
+  { title: '状态', key: 'status', width: 120 }
 ]
 
 const pagination = reactive({
@@ -156,26 +156,17 @@ const pagination = reactive({
 })
 
 onMounted(() => {
-  // 根据路由参数设置面包屑信息和关联题目名称
   const problemName = problemNameMap[problemId.value] || '未知题目'
   problemInfo.value = `[${problemId.value}] ${problemName}`
   relatedProblemName.value = `${problemId.value}${problemName}`
 })
 
-const handleAddSolution = () => {
-  message.info('管理题解（原型展示）')
+const handleCreateSolution = () => {
+  router.push(`/problem-banks/${bankId.value}/problems/${problemId.value}/solutions/create`)
 }
 
 const handleViewProblem = (_record: ProblemSolution) => {
   message.info(`查看题目: ${relatedProblemName.value}（原型展示）`)
-}
-
-const handleManage = (record: ProblemSolution) => {
-  message.info(`管理题解: ${record.id}（原型展示）`)
-}
-
-const handleDelete = (record: ProblemSolution) => {
-  message.warning(`删除题解: ${record.id}（原型展示）`)
 }
 </script>
 
@@ -209,11 +200,20 @@ const handleDelete = (record: ProblemSolution) => {
   color: #faad14;
 }
 
-.danger-link {
-  color: #ff4d4f;
+.status-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
 }
 
-.danger-link:hover {
-  color: #ff7875;
+.official-tag {
+  display: inline-block;
+  padding: 2px 8px;
+  font-size: 12px;
+  color: #52c41a;
+  background: #f6ffed;
+  border: 1px solid #b7eb8f;
+  border-radius: 4px;
 }
 </style>

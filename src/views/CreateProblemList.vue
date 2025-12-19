@@ -106,19 +106,24 @@
 
         <!-- 开关选项 -->
         <a-row :gutter="24">
-          <a-col :span="8">
+          <a-col :span="6">
             <a-form-item label="是否需要重新作答">
               <a-switch v-model:checked="formData.needRetry" checked-children="是" un-checked-children="否" />
             </a-form-item>
           </a-col>
-          <a-col :span="8">
+          <a-col :span="6">
             <a-form-item label="是否展示题目难度信息">
               <a-switch v-model:checked="formData.showDifficulty" checked-children="是" un-checked-children="否" />
             </a-form-item>
           </a-col>
-          <a-col :span="8">
+          <a-col :span="6">
             <a-form-item label="是否展示题目标签">
               <a-switch v-model:checked="formData.showTags" checked-children="是" un-checked-children="否" />
+            </a-form-item>
+          </a-col>
+          <a-col :span="6">
+            <a-form-item label="是否在客观题提交后显示答案">
+              <a-switch v-model:checked="formData.showObjectiveAnswer" checked-children="是" un-checked-children="否" />
             </a-form-item>
           </a-col>
         </a-row>
@@ -177,6 +182,7 @@ const formData = reactive({
   needRetry: false,
   showDifficulty: false,
   showTags: false,
+  showObjectiveAnswer: false,
 })
 
 const handleCopyFromOther = () => {
