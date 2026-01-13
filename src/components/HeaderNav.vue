@@ -82,7 +82,7 @@
         <template #overlay>
           <a-menu>
             <a-menu-item key="profile">个人中心</a-menu-item>
-            <a-menu-item key="settings">设置</a-menu-item>
+            <a-menu-item key="switch-student" @click="handleSwitchToStudent">切换学生端</a-menu-item>
             <a-menu-divider />
             <a-menu-item key="logout">退出登录</a-menu-item>
           </a-menu>
@@ -134,6 +134,12 @@ const handleTaskManagement = () => {
 
 const handleRewardManagement = () => {
   router.push({ name: 'TaskManagement' })
+}
+
+// 切换到学生端
+const handleSwitchToStudent = () => {
+  // 跳转到学生端，这里可以根据实际情况修改跳转地址
+  window.open('/', '_blank')
 }
 
 // 根据路由更新选中的菜单项

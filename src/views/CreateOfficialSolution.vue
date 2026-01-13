@@ -103,7 +103,7 @@
 
       <!-- 操作按钮 -->
       <div class="form-actions">
-        <a-button type="primary" @click="handleSave">创建</a-button>
+        <a-button type="primary" @click="handleSave">保存</a-button>
         <a-button @click="handleCancel">取消</a-button>
       </div>
     </div>
@@ -250,7 +250,7 @@ const handleCancel = () => {
 }
 
 .required-label {
-  color: #ff4d4f;
+  color: #333;
   font-weight: 500;
   white-space: nowrap;
 }

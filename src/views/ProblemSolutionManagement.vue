@@ -12,7 +12,10 @@
 
     <div class="page-header">
       <h2>题解管理</h2>
-      <a-button type="primary" @click="handleCreateSolution">新增题解</a-button>
+      <a-space>
+        <a-button @click="handleCloseSolutionPublish">关闭发布题解</a-button>
+        <a-button type="primary" @click="handleCreateSolution">新增题解</a-button>
+      </a-space>
     </div>
 
     <!-- 题解表格 -->
@@ -46,7 +49,7 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { message } from 'ant-design-vue'
+import { message, Modal } from 'ant-design-vue'
 
 interface ProblemSolution {
   id: string
@@ -163,6 +166,18 @@ onMounted(() => {
 
 const handleCreateSolution = () => {
   router.push(`/problem-banks/${bankId.value}/problems/${problemId.value}/solutions/create`)
+}
+
+const handleCloseSolutionPublish = () => {
+  Modal.confirm({
+    title: '确认关闭',
+    content: '确认要关闭当前题目的题解吗？',
+    okText: '确认',
+    cancelText: '取消',
+    onOk() {
+      message.success('已关闭发布题解（原型展示）')
+    }
+  })
 }
 
 const handleViewProblem = (_record: ProblemSolution) => {
